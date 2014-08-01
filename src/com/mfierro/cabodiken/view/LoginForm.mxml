@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%" height="100%"
+	verticalAlign="middle" horizontalAlign="left">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.events.LoginEvent;
+			
+			private function login( e:MouseEvent ):void {
+				
+				var event:LoginEvent = new LoginEvent( username.text, password.text );
+				event.dispatch();				
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:FormItem label="Username">
+		
+		<mx:TextInput id="username" />
+		
+	</mx:FormItem>
+	
+	<mx:FormItem label="Password">
+		
+		<mx:TextInput id="password" displayAsPassword="true" />
+		
+	</mx:FormItem>
+	
+	<mx:Button label="Submit" click="login(event)" />
+	
+</mx:VBox>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		width="100%" 
+		height="100"
+		styleName="boxStyle">
+		
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.vo.UserData;
+			import flash.events.Event;
+			import flash.events.KeyboardEvent;
+			import flash.events.MouseEvent;
+			import mx.core.EdgeMetrics;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			[Bindable]
+			private var _user:UserData = null;
+			
+			[Bindable]
+			public function set user ( value:UserData ) : void {
+				
+				if (!_user) 
+				{
+					_user = value;
+				}
+				
+			}
+			
+			public function get user() : UserData {
+				
+				return _user;
+				
+			}
+			
+			private function getOnlineText( user:UserData ):String {
+				if (user.isOnline) {
+					return "Online";
+				} else {
+					return "Offline";
+				}
+			}
+			
+			private function beginEdit( event:MouseEvent ) : void {
+				
+				//TODO, open alert to change message
+				
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:Style>
+		@namespace mx "http://www.adobe.com/2006/mxml";
+		.messageStyle {
+			border-style: inset;
+            background-color: gray;
+		}
+		.userName {
+			font-size: 12;
+			font-weight:bold;
+			text-align:center;
+		}
+		.boxStyle {
+			border-style: outset;
+            background-color: gray;
+		}
+	</mx:Style>
+	
+	<mx:Text id="userName" text="{_user.name}" styleName="userName" width="100%" useHandCursor="false" 
+		buttonMode="true" mouseChildren="false"/>
+	
+	<mx:TextArea id="userMessage" text="{_user.message}" width="100%" height="100%" click="beginEdit(event)" useHandCursor="true" 
+		buttonMode="true" mouseChildren="false" backgroundAlpha="0" borderSkin="{null}" editable="false" />
+		
+	<mx:Text id="isOnline" text="{getOnlineText(_user)}" useHandCursor="false" buttonMode="true" mouseChildren="false"/>
+	
+</mx:VBox>

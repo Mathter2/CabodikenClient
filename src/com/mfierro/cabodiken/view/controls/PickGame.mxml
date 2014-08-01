@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+			xmlns:mx="http://www.adobe.com/2006/mxml"
+			xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+			title="Create Game"
+			showCloseButton="true"
+			close="close()"
+			width="300" 
+			height="500"
+			verticalAlign="bottom"
+			creationComplete="init()">
+			
+	<mx:VBox width="100%" height="100%">
+		
+		<mx:Script>
+			<![CDATA[
+				import com.mfierro.cabodiken.events.CreateGameEvent;
+				import com.mfierro.cabodiken.events.GetGamesEvent;
+				import com.mfierro.cabodiken.model.ModelLocator;
+				import com.mfierro.cabodiken.vo.ObjectData;
+				import com.mfierro.cabodiken.vo.UserData;
+				import mx.collections.ArrayCollection;
+				import mx.utils.ObjectUtil;
+				import com.mfierro.cabodiken.view.controls.FriendStatus;
+				
+				import mx.managers.PopUpManager;
+				
+				[Bindable]
+				private var model:ModelLocator = ModelLocator.getInstance();
+				
+				private function init() : void {
+					
+					PopUpManager.centerPopUp(this);
+					var getGames:GetGamesEvent = new GetGamesEvent( model.sessionTokenId );
+					getGames.dispatch();
+					
+				}
+				
+				private function close() : void {
+					
+					PopUpManager.removePopUp(this);
+					
+				}
+				
+				private function create() : void {
+					
+					var createGame:CreateGameEvent = new CreateGameEvent( lstGames.selectedItem as ObjectData );
+					createGame.dispatch();
+					close();
+					
+				}
+				
+			]]>
+		</mx:Script>
+		
+		<mx:Text id="lblList" text="List of available games:" />
+		
+		<mx:HBox width="100%" height="100%">
+			
+			<mx:Spacer width="5" />
+			
+			<mx:List id="lstGames" width="100%" height="100%" dataProvider="{model.games}" />
+			
+			<mx:Spacer width="5" />
+			
+		</mx:HBox>
+
+		<mx:HBox width="100%" height="25">
+			
+			<mx:Spacer width="5" />
+
+			<mx:Button id="btnCancel" label="Close" click="close()" />
+			
+			<mx:Spacer width="100%" />
+			
+			<mx:Button id="btnCreate" label="Create" enabled="{lstGames.selectedIndex != -1}" click="create()" />
+			
+			<mx:Spacer width="5" />
+			
+		</mx:HBox>
+		
+	</mx:VBox>
+	
+</mx:TitleWindow>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+		width="100%" 
+		height="100%"
+		verticalAlign="bottom">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.vo.InvitationData;
+			import mx.collections.ArrayCollection;
+			import mx.utils.ObjectUtil;
+			com.mfierro.cabodiken.view.controls.InvitationView;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			[Bindable]
+			private var _invitations:ArrayCollection = new ArrayCollection;
+			
+			public function set invitations( value: ArrayCollection ) : void {
+				
+				if (ObjectUtil.compare( _invitations, value ) != 0 ) {
+					this.removeAllChildren();
+					for each (var invitation:InvitationData in value) {
+						var invitationView : InvitationView = new InvitationView();
+						invitationView.invitation = invitation;
+						this.addChild(invitationView);
+					}
+					_invitations = value;
+				}
+			}
+			
+			public function get invitations() : ArrayCollection {
+				
+				return _invitations;
+				
+			}
+		]]>
+	</mx:Script>
+	
+</mx:VBox>

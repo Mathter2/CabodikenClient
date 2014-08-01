@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+		width="100%" 
+		height="100%">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.vo.GameSessionData;
+			import com.mfierro.cabodiken.vo.PlayerData;
+			import com.mfierro.cabodiken.vo.UserData;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Text;
+			import mx.utils.ObjectUtil;
+			import com.mfierro.cabodiken.view.controls.PlayerLobbyControl;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			[Bindable]
+			private var _players:ArrayCollection = new ArrayCollection();
+			
+			public function set players( value: ArrayCollection ) : void {
+				
+				if (ObjectUtil.compare( _players, value ) != 0 ) {
+					
+					this.removeAllChildren();
+					
+					for (var index:int = 0; index < 8; index++) {
+						
+						if (index < value.length) {
+							
+							var player:PlayerData = value[index]
+							var playerControl:PlayerLobbyControl = new PlayerLobbyControl();
+							playerControl.player = player;
+							
+							if (player.id == model.user.id) {
+								
+								playerControl.width = 150;
+								playerControl.editable = true;
+								playerControl.styleName = "userBoxStyle";
+							}
+							else {
+								
+								playerControl.percentWidth = 100;
+								playerControl.styleName = "friendBoxStyle";
+								
+							}
+							
+							this.addChild(playerControl);
+							
+						}
+						else
+						{
+							var placeholder:Text = new Text();
+							placeholder.percentWidth = 100;
+							placeholder.text = "Waiting for Player " + (index + 1);
+							this.addChild(placeholder);
+						}
+						
+					}
+					
+					_players = value;
+					
+				}
+			}
+
+			public function get players() : ArrayCollection {
+				
+				return _players;
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:HBox>

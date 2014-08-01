@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		width="100%" 
+		height="100"
+		styleName="boxStyle">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.events.JoinGameSessionEvent;
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.vo.InvitationData;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			[Bindable]
+			public var invitation:InvitationData;
+			
+			private function accept() : void {
+				
+				var joinEvent:JoinGameSessionEvent = new JoinGameSessionEvent( invitation.gameSessionId );
+				joinEvent.dispatch();
+				
+			}
+				
+		]]>
+	</mx:Script>
+	
+	<mx:Style>
+		@namespace mx "http://www.adobe.com/2006/mxml";
+		.boxStyle {
+			border-style: outset;
+            background-color: gray;
+		}
+		.friendName {
+			font-size: 12;
+			font-weight:bold;
+			text-align:center;
+		}
+	</mx:Style>
+	
+	<mx:TextArea id="friendMessage" text="{invitation.getText()}" height="100%" editable="false" 
+		backgroundAlpha="0" borderSkin="{null}" useHandCursor="false" buttonMode="true" mouseChildren="false"/>
+	
+	<mx:HBox height="100%" width="100%">
+		<mx:Button id="btnReject" label="Reject" />
+		<mx:Button id="btnAccept" label="Accept" click="accept()" />
+	</mx:HBox>
+	
+</mx:VBox>

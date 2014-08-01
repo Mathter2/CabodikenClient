@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		width="100%" 
+		height="100%">
+		
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.vo.PlayerData;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			[Bindable]
+			public var player:PlayerData;
+			[Bindable]
+			public var editable:Boolean = false;
+			
+		]]>
+	</mx:Script>
+	<mx:Style>
+		@namespace mx "http://www.adobe.com/2006/mxml";
+		.playerName {
+			font-size: 12;
+			font-weight:bold;
+			text-align:center;
+		}
+		.friendBoxStyle {
+			border-style: outset;
+            background-color: #F0FFFF;
+		}
+		.userBoxStyle {
+			border-style: outset;
+			background-color: #90EE90;
+		}
+	</mx:Style>
+	
+	<mx:Text id="playerName" text="{player.name}" styleName="playerName" width="100%" />
+	
+	<mx:HBox height="15" width="100%">
+		<mx:Text id="lblDecks" text="Decks:" />
+		<mx:Spacer width="100%" />
+		<mx:Button id="btnAddDecks" label="ADD" enabled="false" visible="{editable}" height="15" />
+	</mx:HBox>
+	<mx:List id="lstDecks" dataProvider="{player.customDecks}" height="100%" width="100%" />
+	
+	<mx:HBox height="15" width="100%">
+		<mx:Text id="lblDices" text="Dices:" />
+		<mx:Spacer width="100%" />
+		<mx:Button id="btnAddDices" label="ADD" enabled="false" visible="{editable}" height="15" />
+	</mx:HBox>
+	<mx:List id="lstDices" dataProvider="{player.customDices}" height="100%" width="100%" />
+	
+	<mx:HBox height="15" width="100%">
+		<mx:Text id="lblTokens" text="Tokens:" />
+		<mx:Spacer width="100%" />
+		<mx:Button id="btnAddTokens" label="ADD" enabled="false" visible="{editable}" height="15" />
+	</mx:HBox>
+	<mx:List id="lstTokens" dataProvider="{player.customTokens}" height="100%" width="100%" />
+	
+</mx:VBox>

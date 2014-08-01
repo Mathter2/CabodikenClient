@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+		width="100%" 
+		height="100%"
+		creationComplete="init()">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.events.GetFriendsEvent;
+			import com.mfierro.cabodiken.events.GetGameSessionEvent;
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import flash.events.TimerEvent;
+			import flash.utils.ByteArray;
+			import flash.utils.Timer;
+			import mx.utils.Base64Decoder;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			
+			private var timer:Timer = new Timer(5000);
+			
+			private function init() : void {
+				
+				timer.addEventListener(TimerEvent.TIMER, tick);
+				timer.start();
+				tick(null);
+				
+			}
+			
+			private function tick(timer:TimerEvent) : void {
+				
+				var decoder:Base64Decoder = new Base64Decoder();
+				var byteArray:ByteArray;
+				decoder.decode(model.image);
+				byteArray = decoder.toByteArray();
+				card.load(byteArray);
+				texto.text = model.image;
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Image id="card" />
+	
+	<mx:TextArea id="texto" />
+
+</mx:VBox>

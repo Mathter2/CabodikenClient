@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+		width="100%" 
+		height="100%"
+		creationComplete="init()">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.commands.GetInvitationsCommand;
+			import com.mfierro.cabodiken.events.GetFriendsEvent;
+			import com.mfierro.cabodiken.events.GetInvitationsEvent;
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import flash.events.TimerEvent;
+			import flash.utils.Timer;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			
+			private var timer:Timer = new Timer(5000);
+			
+			private function init() : void {
+				
+				timer.addEventListener(TimerEvent.TIMER, tick);
+				timer.start();
+				tick(null);
+				
+			}
+			
+			private function tick(timer:TimerEvent) : void {
+				
+				if (model.sessionTokenId) 
+				{
+					var getFriends:GetFriendsEvent = new GetFriendsEvent( model.sessionTokenId );
+					var getInvitations:GetInvitationsEvent = new GetInvitationsEvent( model.sessionTokenId );
+					getFriends.dispatch();
+					getInvitations.dispatch();
+				}
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox verticalAlign="bottom">
+		
+		<controls:UserStatus user="{model.user}" />
+		<mx:Spacer height="100%" />
+		<controls:FriendList friends="{model.friends}" width="170" />
+		
+	</mx:VBox>
+	
+	
+	
+	<controls:LobbyControl width="100%" />
+	
+	<controls:InvitationList invitations="{model.invitations}" width="170" />
+	
+</mx:HBox>

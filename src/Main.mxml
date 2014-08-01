@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:business="com.mfierro.cabodiken.business.*"
+	xmlns:control="com.mfierro.cabodiken.control.*"
+	xmlns:view="com.mfierro.cabodiken.view.*"
+	layout="vertical" 
+	creationComplete="init()"
+	paddingLeft="10" 
+	paddingRight="10" 
+	paddingTop="10" 
+	paddingBottom="10"> 
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.business.Services;
+			import com.adobe.cairngorm.business.ServiceLocator;
+			import com.mfierro.cabodiken.model.ModelLocator;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			
+			private function init():void {
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<business:Services id="services" />
+	<control:CabodikenController id="controller" />
+	
+	<mx:ViewStack id="mainView" width="100%" height="100%" selectedIndex="{model.workflowState}">
+		<view:LoginForm />
+		<view:Lobby />
+		<view:GameLobby />
+		<view:Game />
+		<view:ResourceCreator />
+	</mx:ViewStack>
+		
+</mx:Application>

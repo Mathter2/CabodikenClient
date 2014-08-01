@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+		width="100%" 
+		height="100%"
+		verticalAlign="bottom">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.vo.UserData;
+			import mx.collections.ArrayCollection;
+			import mx.containers.Box;
+			import mx.utils.ObjectUtil;
+			import com.mfierro.cabodiken.view.controls.FriendStatus;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			[Bindable]
+			private var _friends:ArrayCollection = new ArrayCollection;
+			
+			public var showMini:Boolean = false;
+			
+			public function set friends( value: ArrayCollection ) : void {
+				
+				if (ObjectUtil.compare( _friends, value ) != 0 ) {
+					
+					this.removeAllChildren();
+					
+					for each(var friend:UserData in value) 
+					{
+						
+						if (showMini) {
+							
+							var friendStatusMini:FriendStatusMini = new FriendStatusMini();
+							friendStatusMini.friend = friend;
+							this.addChild(friendStatusMini);
+							
+						} else {
+							
+							var friendStatus:FriendStatus = new FriendStatus();
+							friendStatus.friend = friend;
+							this.addChild(friendStatus);
+							
+						}
+						
+						
+					}
+					_friends = value;
+				}
+			}
+			
+			public function get friends() : ArrayCollection {
+				
+				return _friends;
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:VBox>
