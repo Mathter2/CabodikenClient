@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+		styleName=".boxStyle"
+		verticalScrollPolicy="off" horizontalScrollPolicy="off"
+		dragEnter="dragEnter(event)" dragDrop="dragDrop(event)">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.model.Area;
+			import com.mfierro.cabodiken.model.Deck;
+			import com.mfierro.cabodiken.model.GameObject;
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import flash.utils.Dictionary;
+			import mx.collections.ArrayCollection;
+			import mx.containers.Canvas;
+			import mx.controls.Image;
+			import mx.core.DragSource;
+			import mx.core.UIComponent;
+			import mx.events.DragEvent;
+			import mx.utils.ObjectUtil;
+			import mx.effects.Move;
+			import mx.managers.DragManager;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			[Bindable]
+			private var _lastActionCounter:int;
+			
+			private var placedObjects:Dictionary = new Dictionary();
+			private var placedControls:Dictionary = new Dictionary();
+			
+			public function set lastActionCounter( value: int ) : void {
+				
+				var placedControl:UIComponent;
+					
+				for each( var gameObject:GameObject in model.table.getObjects() ) {
+					
+					if ( placedObjects[gameObject.id] == null ) {
+						
+						placedObjects[gameObject.id] = gameObject.clone();
+						placedControl = gameObject.draw()
+						placedControls[gameObject.id] = placedControl;
+						this.addChild(placedControl);
+						
+					} else {
+						
+						var placedObject:GameObject = placedObjects[gameObject.id];
+						
+						if (ObjectUtil.compare(placedObject, gameObject) != 0 ) {
+							
+							if ( ObjectUtil.compare(placedObject.location, gameObject.location) != 0 ) {
+								
+								var moveEffect:Move = new Move();
+								placedControl = placedControls[gameObject.id];
+								placedObject = gameObject.clone();
+								placedObjects[gameObject.id] = placedObject;
+								moveEffect.target = placedControl;
+								moveEffect.xTo = gameObject.location.x;
+								moveEffect.yTo = gameObject.location.y;
+								moveEffect.play();
+								placedControl.x = gameObject.location.x;
+								placedControl.y = gameObject.location.y;
+								
+							} else {
+								
+								this.removeElement(placedControls[gameObject.id]);
+								placedControl = gameObject.draw();
+								placedControls[gameObject.id] = placedControl;
+								this.addElement(placedControl);
+								
+							}
+							
+							
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			public function get lastActionCounter () : int {
+				
+				return _lastActionCounter;
+				
+			}
+			
+			private function dragEnter( event:DragEvent ) : void {
+				
+				var dragSource:DragSource = event.dragSource;
+				// Accept the drag only if the user is dragging data 
+				// identified by the 'color' format value.
+				if (dragSource.hasFormat("type") && dragSource.hasFormat("object") && 
+					dragSource.hasFormat("x") && dragSource.hasFormat("y") ) {
+
+					// Get the drop target component from the event object.
+					var target:UIComponent = event.currentTarget as UIComponent;
+					// Accept the drop.
+					DragManager.acceptDragDrop(target);
+					DragManager.showFeedback(DragManager.MOVE);
+				}
+				
+			}
+			
+			private function dragDrop( event:DragEvent ) : void {
+				
+				var gameObject:GameObject = event.dragSource.dataForFormat("object") as GameObject;
+				var source:UIComponent = event.dragInitiator as UIComponent;
+				var target:UIComponent =  event.currentTarget as UIComponent;
+				var x:int = event.localX - Number(event.dragSource.dataForFormat("x"));
+				var y:int = event.localY - Number(event.dragSource.dataForFormat("y"));
+				gameObject.executeMove( source, target, x, y );
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Style>
+		@namespace mx "http://www.adobe.com/2006/mxml";
+		.boxStyle {
+			border-style: outset;
+            background-color: gray;
+		}
+		.friendName {
+			font-size: 12;
+			font-weight:bold;
+			text-align:center;
+		}
+	</mx:Style>
+	
+</mx:Canvas>

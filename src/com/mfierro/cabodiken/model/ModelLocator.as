@@ -6,7 +6,9 @@ package com.mfierro.cabodiken.model {
 	import com.adobe.cairngorm.model.IModelLocator;
 	import com.mfierro.cabodiken.factories.ObjectPositionerFactory;
 	import com.mfierro.cabodiken.vo.GameSessionData;
+	import com.mfierro.cabodiken.vo.ResourceLibrary;
 	import com.mfierro.cabodiken.vo.UserData;
+	import flash.utils.Dictionary;
 	
 	import mx.collections.ArrayCollection;
     
@@ -40,8 +42,7 @@ package com.mfierro.cabodiken.model {
 		*	Variables
 		*/
 		
-		//public var workflowState:uint = ModelLocator.GAME_LOBBY; //CHANGE!!!
-		public var workflowState:uint = ModelLocator.EDITOR; //CHANGE!!!
+		public var workflowState:uint = ModelLocator.LOGIN_FORM; //CHANGE!!!
 				
 		//public var sessionTokenId:String = "gxb1O3aMChiU77WXnnheF635IKwJltJd51w3IXfMLBo7pxFpNtT5F6TtVtJaZi56"; //CHAGE!!!
 		public var sessionTokenId:String = ""; //CHAGE!!!
@@ -53,6 +54,11 @@ package com.mfierro.cabodiken.model {
 		public var gameSessionId:String = "";
 		public var gameSession:GameSessionData;
 		public var objectPositioner:ObjectPositionerFactory;
+		public var resources:ResourceLibrary;
+		public var lastActionId:int = 0;
+		public var table:Area = new Area(0);
+		//public var decks:ArrayCollection = new ArrayCollection();
+		public var gameObjects:Dictionary = new Dictionary();
 		
 		public static const LOGIN_FORM:uint = 0;
 		public static const LOBBY:uint = 1;

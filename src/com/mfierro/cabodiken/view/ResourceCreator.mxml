@@ -33,21 +33,13 @@
 			
 			private function getFrontImage() : void {
 				
-				var encoder:JPEGEncoder = new JPEGEncoder(90);
-				var byteArray:ByteArray ;
-				var base64encoder:Base64Encoder = new Base64Encoder();
 				imgFront.load(txtFrontImage.text);
-				//byteArray = encoder.encode(Bitmap(imgFront.content).bitmapData);
-				base64encoder.encodeBytes(imgFront.loaderInfo.bytes);
-				currentCard.frontImage = base64encoder.toString();
+				
 			}
 			
 			private function load() : void {
 				
-				var decoder:JPEGEncoder = new JPEGEncoder(90)
-				var base64decoder:Base64Decoder = new Base64Decoder();
-				base64decoder.decode(currentCard.frontImage);
-				imgFrontString.load(decoder.encodeByteArray(base64decoder.toByteArray(),imgFront.width, imgFront.height));
+				
 				
 			}
 			

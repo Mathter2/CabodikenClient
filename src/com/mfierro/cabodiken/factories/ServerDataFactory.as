@@ -93,5 +93,37 @@ package com.mfierro.cabodiken.factories {
 			
 		}
 		
+		public static function buildCardData ( cardData:Object ) : CardData {
+			
+			return new CardData( cardData.Id, cardData.Name, cardData.Back, cardData.Front );
+			
+		}
+		
+		public static function buildDeckData ( deckData:Object ) : DeckData {
+			
+			var cards:ArrayCollection = new ArrayCollection();
+			
+			for each (var card:Object in deckData.Cards) 
+			{
+				cards.addItem(buildCardData(card));
+			}
+			
+			return new DeckData(deckData.Id, deckData.Name, cards);
+			
+		}
+		
+		public static function buildResourceLibrary ( resourceLibrary:Object ) : ResourceLibrary {
+			
+			var decks:ArrayCollection = new ArrayCollection();
+			
+			for each (var deck:Object in resourceLibrary.Decks) 
+			{
+				decks.addItem(buildDeckData(deck));
+			}
+			
+			return new ResourceLibrary(new ArrayCollection(), decks, new ArrayCollection(), new ArrayCollection()); 
+			
+		}
+		
 	}
 }

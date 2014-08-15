@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+		styleName=".boxStyle"
+		verticalScrollPolicy="off" horizontalScrollPolicy="off"
+		width="300" height="300">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.events.ExecuteActionEvent;
+			import com.mfierro.cabodiken.model.Action;
+			import com.mfierro.cabodiken.model.Area;
+			import com.mfierro.cabodiken.model.Deck;
+			import com.mfierro.cabodiken.model.GameObject;
+			import com.mfierro.cabodiken.model.ModelLocator;
+			import flash.events.MouseEvent;
+			import flash.utils.Dictionary;
+			import mx.collections.ArrayCollection;
+			import mx.containers.Canvas;
+			import mx.controls.Image;
+			import mx.core.UIComponent;
+			import mx.utils.ObjectUtil;
+			import mx.effects.Move;
+			
+			[Bindable]
+			private var model:ModelLocator = ModelLocator.getInstance();
+			[Bindable]
+			public var actions:ArrayCollection = null;
+			[bindable]
+			public var area:PlayArea = null;
+			
+			public function show() : void {
+				
+				if (actions == null) { throw new Error("Cannot create radial menu. No actions were assigned"); }
+				if (area == null) { throw new Error("Cannot create radial menu. No area was assigned"); }
+				var elementAngle:Number = 0;
+				var angleAdd:Number;
+				var center:Number = this.width / 2;
+				var radious:Number = this.width / 3;
+				this.x = area.mouseX - center;
+				this.y = area.mouseY - center;
+				angleAdd = 360 / actions.length;
+				for (var i:int = 0; i < actions.length; i++) 
+				{
+					var element:MenuItem = new MenuItem();
+					var action:Action = actions[i] as Action;
+					var imageRadious:Number = 50 / 2;;
+					var move:Move = new Move(element);
+					
+					element.action = action;
+					element.addEventListener( MouseEvent.CLICK, clickAction );
+					move.xFrom = center - imageRadious;
+					move.yFrom = center - imageRadious;
+					move.xTo = center + (radious * Math.cos(elementAngle * Math.PI / 180)) - imageRadious;
+					move.yTo = center + (radious * Math.sin(elementAngle * Math.PI / 180)) - imageRadious;
+					this.addChild(element);
+					elementAngle += angleAdd;
+					move.play();
+				}
+				this.addEventListener(MouseEvent.MOUSE_OUT, mouseOut);
+				area.addChild(this);
+				
+			}
+			
+			private function mouseOut( event:MouseEvent ) : void {
+			
+				var menu:Canvas = event.target as Canvas;
+				
+				if ( menu != null && !menu.contains(event.relatedObject) ) {
+					
+					menu.parent.removeChild(menu);
+					
+				}
+
+			}
+			
+			private function clickAction( event:MouseEvent ) : void {
+				
+				var action:Action = (event.target as MenuItem).action;
+				var executeAction:ExecuteActionEvent = new ExecuteActionEvent( action.name, action.objectId, action.parameters );
+				executeAction.dispatch();
+				this.parent.removeChild(this);
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Style>
+		@namespace mx "http://www.adobe.com/2006/mxml";
+		.boxStyle {
+			border-style: outset;
+            background-color: gray;
+		}
+		.friendName {
+			font-size: 12;
+			font-weight:bold;
+			text-align:center;
+		}
+	</mx:Style>
+	
+</mx:Canvas>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Image xmlns:mx="http://www.adobe.com/2006/mxml"
+	useHandCursor="true"
+	buttonMode="true"
+	mouseChildren="false">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.mfierro.cabodiken.model.Action;
+			
+			[Bindable]
+			private var _action:Action;
+			
+			public function set action ( value:Action ) : void {
+				
+				_action = value;
+				this.load(_action.imageURL);
+				
+			}
+			
+			public function get action () : Action {
+				
+				return _action;
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Style>
+		@namespace mx "http://www.adobe.com/2006/mxml";
+		.boxStyle {
+			border-style: outset;
+            background-color: gray;
+		}
+		.friendName {
+			font-size: 12;
+			font-weight:bold;
+			text-align:center;
+		}
+	</mx:Style>
+	
+</mx:Image>
