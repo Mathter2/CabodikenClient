@@ -2,12 +2,6 @@
 <cairngorm:ServiceLocator 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:cairngorm="com.adobe.cairngorm.business.*" >
-	
-	<!-- Delicious Posts JSON HTTPService -->
-	<mx:HTTPService id="postsService"
-		url="http://del.icio.us/feeds/json/"
-		resultFormat="text"
-		showBusyCursor="true" />
 		
 	<mx:WebService id="WebServiceAuthentication"
 		wsdl="http://localhost:11604/WebServices/WebServiceAuthentication.svc?wsdl" />

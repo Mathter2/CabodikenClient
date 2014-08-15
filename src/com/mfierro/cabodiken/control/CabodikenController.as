@@ -24,6 +24,8 @@ package com.mfierro.cabodiken.control {
 			this.addCommand( JoinGameSessionEvent.NAME, JoingGameSessionCommand);
 			this.addCommand( BeginGameEvent.NAME, BeginGameCommand );
 			this.addCommand( LoadResourcesEvent.NAME, LoadResourcesCommand );
+			this.addCommand( GetActionsEvent.NAME, GetActionsCommand );
+			this.addCommand( ExecuteActionEvent.NAME, ExecuteActionCommand );
 			
 		}
 	}

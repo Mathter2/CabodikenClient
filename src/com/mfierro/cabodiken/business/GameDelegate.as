@@ -1,5 +1,6 @@
 package com.mfierro.cabodiken.business {
 	
+	import mx.collections.ArrayCollection;
 	import mx.rpc.Responder;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
@@ -23,7 +24,20 @@ package com.mfierro.cabodiken.business {
 		
 		public function LoadGameResourcesV01() : void {
 			
-			callWebService( service.LoadGameResourcesV01( model.sessionTokenId, model.gameSessionId) );
+			callWebService( service.LoadGameResourcesV01( model.sessionTokenId, model.gameSessionId ) );
+			
+		}
+		
+		public function GetActionsV01() : void {
+			
+			callWebService( service.GetActionsV01( model.sessionTokenId, model.gameSessionId, model.lastActionId ) )
+			
+		}
+		
+		public function ExecuteActionV01( actionName:String, parameters:ArrayCollection ) : void {
+			
+			callWebService ( service.ExecuteActionV01( model.sessionTokenId, model.gameSessionId, model.lastActionId, 
+													   actionName, parameters ) ) ;
 			
 		}
 		

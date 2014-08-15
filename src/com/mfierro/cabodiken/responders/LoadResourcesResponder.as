@@ -16,8 +16,7 @@ package com.mfierro.cabodiken.responders
 		public function result( e:Object ):void {
 			
 			var event:ResultEvent = e as ResultEvent;
-			//model.games = ServerDataFactory.buildObjectDataList( event.result );
-			model.image = event.result.Decks[0].Cards[0].Front;
+			model.resources = ServerDataFactory.buildResourceLibrary(event.result);
 			
 		}
 		
