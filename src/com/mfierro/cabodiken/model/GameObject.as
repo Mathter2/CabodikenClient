@@ -35,7 +35,7 @@ package com.mfierro.cabodiken.model
 			
 		}
 		
-		public function executeMove( source:UIComponent, target:UIComponent, x:int, y:int ) : void {
+		public function executeMove( type:String, source:UIComponent, target:UIComponent, x:int, y:int ) : void {
 			
 			throw new Error( "Child class didn't override method executeMove(). Please report this as a bug. resourceId= " 
 				+ resourceId + " name=" + name);
@@ -44,7 +44,8 @@ package com.mfierro.cabodiken.model
 		
 		public function clone() : GameObject {
 			
-			return new GameObject(id, resourceId, name, rotation, location.x, location.y, location.z , isLocked);
+			throw new Error( "Child class didn't override method clone(). Please report this as a bug. resourceId= " 
+				+ resourceId + " name=" + name);
 			
 		}
 		

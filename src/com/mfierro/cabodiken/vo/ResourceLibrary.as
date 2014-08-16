@@ -6,14 +6,23 @@ package com.mfierro.cabodiken.vo {
 		
         public var boards:Dictionary = new Dictionary();
 		public var decks:Dictionary = new Dictionary();
+		public var cards:Dictionary = new Dictionary();
 		public var dices:Dictionary = new Dictionary();
 		public var tokens:Dictionary = new Dictionary();
 		
+		
 		public function ResourceLibrary( boards:ArrayCollection, decks:ArrayCollection, dices:ArrayCollection, tokens:ArrayCollection ) {
 			
-			for each (var deck:DeckData in decks) 
-			{
+			for each (var deck:DeckData in decks) {
+				
 				this.decks[deck.id] = deck;
+				
+				for each (var card:CardData in deck.cards) {
+					
+					this.cards[card.id] = card;
+					
+				}
+				
 			}
 			
 		}

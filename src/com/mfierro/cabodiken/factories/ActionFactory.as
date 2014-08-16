@@ -13,10 +13,10 @@ package com.mfierro.cabodiken.factories {
 			{
 				case "LOCK":
 					return buildLockAction( objectId, parameterCollection );
-					break;
 				case "SHUFFLE":
 					return buildShuffleAction( objectId, parameterCollection );
-					break;
+				case "FLIP":
+					return buildFlipAction( objectId, parameterCollection );
 				default:
 					return null;
 			}
@@ -32,6 +32,12 @@ package com.mfierro.cabodiken.factories {
 		private static function buildShuffleAction( objectId:int, parameters:ArrayCollection ) : Action {
 			
 			return new Action( "SHUFFLE", "res/actions/Shuffle.png", objectId, parameters );	
+			
+		}
+		
+		private static function buildFlipAction( objectId:int, parameters:ArrayCollection ) : Action {
+			
+			return new Action( "FLIP", "res/actions/Flip.png", objectId, parameters );
 			
 		}
 		

@@ -47,31 +47,29 @@
 						
 						var placedObject:GameObject = placedObjects[gameObject.id];
 						
+						if ( ObjectUtil.compare(placedObject.location, gameObject.location) != 0 ) {
+								
+							var moveEffect:Move = new Move();
+							placedControl = placedControls[gameObject.id];
+							//placedObject = gameObject.clone();
+							placedObjects[gameObject.id] = placedObject;
+							moveEffect.target = placedControl;
+							moveEffect.xTo = gameObject.location.x;
+							moveEffect.yTo = gameObject.location.y;
+							moveEffect.play();
+							placedControl.x = gameObject.location.x;
+							placedControl.y = gameObject.location.y;
+							placedObject.location = gameObject.location;
+							
+						}
+						
 						if (ObjectUtil.compare(placedObject, gameObject) != 0 ) {
-							
-							if ( ObjectUtil.compare(placedObject.location, gameObject.location) != 0 ) {
-								
-								var moveEffect:Move = new Move();
-								placedControl = placedControls[gameObject.id];
-								placedObject = gameObject.clone();
-								placedObjects[gameObject.id] = placedObject;
-								moveEffect.target = placedControl;
-								moveEffect.xTo = gameObject.location.x;
-								moveEffect.yTo = gameObject.location.y;
-								moveEffect.play();
-								placedControl.x = gameObject.location.x;
-								placedControl.y = gameObject.location.y;
-								
-							} else {
-								
-								this.removeElement(placedControls[gameObject.id]);
-								placedControl = gameObject.draw();
-								placedControls[gameObject.id] = placedControl;
-								this.addElement(placedControl);
-								
-							}
-							
-							
+						
+							this.removeElement(placedControls[gameObject.id]);
+							placedControl = gameObject.draw();
+							placedControls[gameObject.id] = placedControl;
+							this.addElement(placedControl);
+							placedObjects[gameObject.id] = gameObject.clone();
 							
 						}
 						
@@ -107,11 +105,12 @@
 			private function dragDrop( event:DragEvent ) : void {
 				
 				var gameObject:GameObject = event.dragSource.dataForFormat("object") as GameObject;
+				var type:String = event.dragSource.dataForFormat("type") as String;
 				var source:UIComponent = event.dragInitiator as UIComponent;
 				var target:UIComponent =  event.currentTarget as UIComponent;
 				var x:int = event.localX - Number(event.dragSource.dataForFormat("x"));
 				var y:int = event.localY - Number(event.dragSource.dataForFormat("y"));
-				gameObject.executeMove( source, target, x, y );
+				gameObject.executeMove( type, source, target, x, y );
 				
 			}
 			

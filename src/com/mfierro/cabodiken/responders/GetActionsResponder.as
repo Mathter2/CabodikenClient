@@ -1,9 +1,11 @@
 package com.mfierro.cabodiken.responders 
 {
 	import com.mfierro.cabodiken.model.Area;
+	import com.mfierro.cabodiken.model.Card;
 	import com.mfierro.cabodiken.model.Deck;
 	import com.mfierro.cabodiken.model.GameObject;
 	import com.mfierro.cabodiken.model.IContainer;
+	import com.mfierro.cabodiken.model.IFlippable;
 	import com.mfierro.cabodiken.model.ModelLocator;
 	import com.mfierro.cabodiken.vo.LocationData;
 	import mx.collections.ArrayCollection;
@@ -27,6 +29,9 @@ package com.mfierro.cabodiken.responders
 						case "CREATE_DECK":
 							createDeck(action.Parameters);
 							break;
+						case "CREATE_CARD":
+							createCard(action.Parameters);
+							break;
 						case "MOVE":
 							move(action.Parameters);
 							break;
@@ -35,6 +40,9 @@ package com.mfierro.cabodiken.responders
 							break;
 						case "LOCK":
 							lock(action.Parameters);
+							break;
+						case "FLIP":
+							flip(action.Parameters);
 							break;
 						default:
 						Alert.show("Cannot find action: " + action.Name, "Internal Error");
@@ -74,8 +82,27 @@ package com.mfierro.cabodiken.responders
 			deck.location = location;
 			deck.isFaceDown = isFaceDown;
 			deck.isLocked = isLocked;
-			deck.addCards(cards);
+			deck.cards = cards;
 			model.table.addObject(deck);
+			
+		}
+		
+		private function createCard( parameters:ArrayCollection ) : void {
+
+			var card:Card;
+			var id:int = Number(parameters.getItemAt(0));
+			var resourceId:int = Number(parameters.getItemAt(1));
+			var rotation:int = Number(parameters.getItemAt(2));
+			var location:LocationData = getLocationData(parameters.getItemAt(3) as String);
+			var isLocked:Boolean = (parameters.getItemAt(4) as String).toLowerCase() == "true";
+			var isFaceDown:Boolean = (parameters.getItemAt(5) as String).toLowerCase() == "true";
+			
+			card = new Card(id, resourceId, "");
+			card.rotation = rotation;
+			card.location = location;
+			card.isFaceDown = isFaceDown;
+			card.isLocked = isLocked;
+			model.table.addObject(card);
 			
 		}
 		
@@ -106,6 +133,15 @@ package com.mfierro.cabodiken.responders
 			
 		}
 		
+		private function flip( parameters:ArrayCollection ) : void {
+			
+			var id:int = Number(parameters[0]);
+			var isFaceDown:Boolean = parameters[1].toString().toLowerCase() == "true";
+			var flippableObject:IFlippable = model.table.findObject(id) as IFlippable;
+			flippableObject.flip(isFaceDown);
+			
+		}
+		
 		private function getLocationData( parameters:String ) : LocationData {
 			
 			var locationSplit:Array = parameters.split(",");
@@ -115,14 +151,23 @@ package com.mfierro.cabodiken.responders
 		
 		private function getContents( contents:String ) : ArrayCollection {
 			
-			var contentsSplit:Array = contents.split(",");
-			var newContents:ArrayCollection = new ArrayCollection();
-			for each (var content:String in contentsSplit) 
-			{
-				newContents.addItem(Number(content));
-			}
-			return newContents;
+			if (contents) {
+				
+				var contentsSplit:Array = contents.split(",");
+				var newContents:ArrayCollection = new ArrayCollection();
+				for each (var content:String in contentsSplit) {
+					
+					newContents.addItem(Number(content));
+				
+				}
+				
+				return newContents;
 			
+			} else {
+				
+				return new ArrayCollection();
+				
+			}
 		}
 		
 	}

@@ -2,7 +2,41 @@
 <cairngorm:ServiceLocator 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:cairngorm="com.adobe.cairngorm.business.*" >
+	
+	<!-- DEV
+	<mx:WebService id="WebServiceAuthentication"
+		wsdl="http://localhost:11604/WebServices/WebServiceAuthentication.svc?wsdl" />
 		
+	<mx:WebService id="WebServiceLobby"
+		wsdl="http://localhost:11604/WebServices/WebServiceLobby.svc?wsdl" />
+		
+	<mx:WebService id="WebServiceGame"
+		wsdl="http://localhost:11604/WebServices/WebServiceGame.svc?wsdl" />
+		
+	-->
+	
+	<!-- BETA 
+	<mx:WebService id="WebServiceAuthentication"
+		wsdl="http://localhost:4391/WebServices/WebServiceAuthentication.svc?wsdl" />
+		
+	<mx:WebService id="WebServiceLobby"
+		wsdl="http://localhost:4391/WebServices/WebServiceLobby.svc?wsdl" />
+		
+	<mx:WebService id="WebServiceGame"
+		wsdl="http://localhost:4391/WebServices/WebServiceGame.svc?wsdl" />
+	-->
+	
+	<!-- PROD
+	<mx:WebService id="WebServiceAuthentication"
+		wsdl="http://cabodiken.servegame.com/WebServices/WebServiceAuthentication.svc?wsdl" />
+		
+	<mx:WebService id="WebServiceLobby"
+		wsdl="http://cabodiken.servegame.com/WebServices/WebServiceLobby.svc?wsdl" />
+		
+	<mx:WebService id="WebServiceGame"
+		wsdl="http://cabodiken.servegame.com/WebServices/WebServiceGame.svc?wsdl" />
+	-->
+	
 	<mx:WebService id="WebServiceAuthentication"
 		wsdl="http://localhost:11604/WebServices/WebServiceAuthentication.svc?wsdl" />
 		
