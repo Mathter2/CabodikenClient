@@ -7,14 +7,14 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.model.CabodikenModel;
 			import com.mfierro.cabodiken.vo.InvitationData;
 			import mx.collections.ArrayCollection;
 			import mx.utils.ObjectUtil;
 			com.mfierro.cabodiken.view.controls.InvitationView;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			[Bindable]
 			private var _invitations:ArrayCollection = new ArrayCollection;
 			

@@ -17,7 +17,6 @@ package com.mfierro.cabodiken.commands {
 		
 		public function execute( event:CairngormEvent ):void {
 			
-			var loginEvent:LoadResourcesEvent = event as LoadResourcesEvent; 
 			var delegate:GameDelegate = new GameDelegate( new LoadResourcesResponder() );
 			delegate.LoadGameResourcesV01();
 			

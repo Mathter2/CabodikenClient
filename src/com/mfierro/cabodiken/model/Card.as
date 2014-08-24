@@ -4,29 +4,34 @@ package com.mfierro.cabodiken.model
 	import com.mfierro.cabodiken.events.ExecuteActionEvent;
 	import com.mfierro.cabodiken.view.controls.RadialMenu;
 	import com.mfierro.cabodiken.view.controls.PlayArea;
+	import com.mfierro.cabodiken.view.controls.HandArea;
 	import com.mfierro.cabodiken.vo.CardData;
+	import com.mfierro.cabodiken.vo.LocationData;
 	import com.mfierro.cabodiken.vo.ResourceLibrary;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import mx.collections.ArrayCollection;
+	import mx.containers.Canvas;
 	import mx.controls.Image;
 	import mx.core.DragSource;
 	import mx.core.UIComponent;
 	import mx.managers.DragManager;
 	
 	[Bindable]
-	public class Card extends GameObject implements IFlippable {
+	public class Card extends GameObject implements IFlippable, IContainable {
 		
 		public var isFaceDown:Boolean = false;
 		
-		public function Card( id:int, resourceId:int, name:String )	{
+		public function Card( id:int, resourceId:int, name:String, location:LocationData, 
+				rotation:int, isLocked:Boolean )	{
 		
-			super(id, resourceId, name);
+			super( id, resourceId, name, location, rotation, isLocked );
 			
 		}
 		
 		override public function draw():UIComponent {
 			
-			var resources:ResourceLibrary = ModelLocator.getInstance().resources;
+			var resources:ResourceLibrary = CabodikenModel.getInstance().resources;
 			var card:CardData = resources.cards[resourceId] as CardData;
 			var image:Image = new Image();
 			
@@ -40,9 +45,10 @@ package com.mfierro.cabodiken.model
 				
 			}
 			
+			image.addEventListener( MouseEvent.CLICK, cardClick );
+			
 			if (!isLocked) {
 				
-				image.addEventListener( MouseEvent.CLICK, cardClick );
 				image.addEventListener( MouseEvent.MOUSE_MOVE, cardMouseMove );
 				
 			} 
@@ -56,21 +62,39 @@ package com.mfierro.cabodiken.model
 		
 		override public function executeMove(type:String, source:UIComponent, target:UIComponent, x:int, y:int) : void {
 			
-			var targetArea:PlayArea = (target as PlayArea);
-			var parameters:ArrayCollection = new ArrayCollection( [ x, y ] );
-			var moveAction:ExecuteActionEvent = new ExecuteActionEvent("MOVE", id, parameters);
+			var parameters:ArrayCollection;
+			var moveAction:ExecuteActionEvent;
+			
+			if (source.parent == target) {
+			
+				parameters = new ArrayCollection( [ x, y ] );
+				moveAction = new ExecuteActionEvent("MOVE", id, parameters);
+			
+			} else {
+				
+				if ( target is PlayArea ) {
+					
+					parameters =  new ArrayCollection( [ x, y, (target as PlayArea).area.areaId ] );
+					
+				} else if ( target is Canvas ) {
+					
+					parameters =  new ArrayCollection( [ x, y, (target.parent as HandArea).area.areaId ] );
+					
+				}
+				
+				moveAction = new ExecuteActionEvent("AREA_MOVE", id, parameters);
+				
+			}
+			
 			moveAction.dispatch();
-		
+			
 		}
 		
 		override public function clone():GameObject {
 			
-			var clone:Card = new Card(id, resourceId, name);
+			var clone:Card = new Card(id, resourceId, name, location, rotation, isLocked );
 			
 			clone.isFaceDown = isFaceDown;
-			clone.isLocked = isLocked;
-			clone.location = location;
-			clone.rotation = rotation;
 			
 			return clone;
 			
@@ -82,10 +106,18 @@ package com.mfierro.cabodiken.model
 			
 		}
 		
+		public function aggregate( targetId:int ):void {
+			
+			var parameters:ArrayCollection = new ArrayCollection( [ targetId ] );
+			var aggregateEvent:ExecuteActionEvent = new ExecuteActionEvent( "AGGREGATE", id, parameters );
+			aggregateEvent.dispatch();
+			
+		}
+		
 		private function cardClick( event:MouseEvent ) : void {
 			
 			var card:Image = event.currentTarget as Image;
-			var area:PlayArea = card.parent as PlayArea;
+			var area:UIComponent = card.parent as UIComponent;
 			showRadialMenu( area );
 			
 		}
@@ -107,7 +139,7 @@ package com.mfierro.cabodiken.model
     		DragManager.doDrag(target, dragSource, event);
         }
 		
-		private function showRadialMenu( area:PlayArea ) : void {
+		private function showRadialMenu( area:UIComponent ) : void {
 			
 			var radialMenu:RadialMenu = new RadialMenu();
 			var actions:ArrayCollection = new ArrayCollection();

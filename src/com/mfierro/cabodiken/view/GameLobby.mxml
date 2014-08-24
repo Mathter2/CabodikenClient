@@ -12,14 +12,14 @@
 			import com.mfierro.cabodiken.events.GetFriendsEvent;
 			import com.mfierro.cabodiken.events.GetGameSessionEvent;
 			import com.mfierro.cabodiken.events.LoadResourcesEvent;
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.model.CabodikenModel;
 			import flash.events.TimerEvent;
 			import flash.utils.Timer;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			
-			private var timer:Timer = new Timer(5000);
+			private var timer:Timer = new Timer(1000);
 			
 			private function init() : void {
 				
@@ -30,26 +30,11 @@
 			}
 			
 			private function tick(timer:TimerEvent) : void {
-				
-				if (model.gameSessionId ) 
-				{
-					if (model.gameSession && model.gameSession.isGameStarted) {
 						
-						var loadResources:LoadResourcesEvent = new LoadResourcesEvent();
-						loadResources.dispatch();
-						this.timer.stop();
-						model.workflowState = ModelLocator.GAME;
-						
-					} else {
-						
-						var getGameSession:GetGameSessionEvent = new GetGameSessionEvent();
-						var getFriends:GetFriendsEvent = new GetFriendsEvent( model.sessionTokenId );
-						getGameSession.dispatch();
-						getFriends.dispatch();
-						
-					}
-					
-				}
+				var getGameSession:GetGameSessionEvent = new GetGameSessionEvent();
+				var getFriends:GetFriendsEvent = new GetFriendsEvent( model.sessionTokenId );
+				getGameSession.dispatch();
+				getFriends.dispatch();
 				
 			}
 			

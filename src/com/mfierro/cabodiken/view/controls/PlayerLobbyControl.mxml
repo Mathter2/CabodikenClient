@@ -5,11 +5,11 @@
 		
 	<mx:Script>
 		<![CDATA[
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.model.CabodikenModel;
 			import com.mfierro.cabodiken.vo.PlayerData;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			[Bindable]
 			public var player:PlayerData;
 			[Bindable]

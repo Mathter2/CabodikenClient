@@ -14,19 +14,19 @@
 		
 		<mx:Script>
 			<![CDATA[
+			
 				import com.mfierro.cabodiken.events.CreateGameEvent;
 				import com.mfierro.cabodiken.events.GetGamesEvent;
-				import com.mfierro.cabodiken.model.ModelLocator;
+				import com.mfierro.cabodiken.model.CabodikenModel;
 				import com.mfierro.cabodiken.vo.ObjectData;
 				import com.mfierro.cabodiken.vo.UserData;
 				import mx.collections.ArrayCollection;
 				import mx.utils.ObjectUtil;
 				import com.mfierro.cabodiken.view.controls.FriendStatus;
-				
 				import mx.managers.PopUpManager;
 				
 				[Bindable]
-				private var model:ModelLocator = ModelLocator.getInstance();
+				private var model:CabodikenModel = CabodikenModel.getInstance();
 				
 				private function init() : void {
 					

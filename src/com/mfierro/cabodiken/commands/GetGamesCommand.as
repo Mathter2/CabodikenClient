@@ -3,12 +3,12 @@ package com.mfierro.cabodiken.commands {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.mfierro.cabodiken.business.LobbyDelegate;
-	import com.mfierro.cabodiken.model.ModelLocator;
+	import com.mfierro.cabodiken.model.CabodikenModel;
 	import com.mfierro.cabodiken.responders.GetGamesResponder;
 
 	public class GetGamesCommand implements ICommand {
 		
-		private var model:ModelLocator = ModelLocator.getInstance();
+		private var model:CabodikenModel = CabodikenModel.getInstance();
 		
 		public function GetGamesCommand() {
 

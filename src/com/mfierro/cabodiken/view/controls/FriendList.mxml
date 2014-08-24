@@ -7,7 +7,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.model.CabodikenModel;
 			import com.mfierro.cabodiken.vo.UserData;
 			import mx.collections.ArrayCollection;
 			import mx.containers.Box;
@@ -15,7 +15,7 @@
 			import com.mfierro.cabodiken.view.controls.FriendStatus;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			[Bindable]
 			private var _friends:ArrayCollection = new ArrayCollection;
 			

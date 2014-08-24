@@ -12,7 +12,7 @@
 			import com.mfierro.cabodiken.model.Area;
 			import com.mfierro.cabodiken.model.Deck;
 			import com.mfierro.cabodiken.model.GameObject;
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.model.CabodikenModel
 			import flash.events.MouseEvent;
 			import flash.utils.Dictionary;
 			import mx.collections.ArrayCollection;
@@ -23,11 +23,11 @@
 			import mx.effects.Move;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			[Bindable]
 			public var actions:ArrayCollection = null;
-			[bindable]
-			public var area:PlayArea = null;
+			[Bindable]
+			public var area:UIComponent = null;
 			
 			public function show() : void {
 				
@@ -40,11 +40,11 @@
 				this.x = area.mouseX - center;
 				this.y = area.mouseY - center;
 				angleAdd = 360 / actions.length;
-				for (var i:int = 0; i < actions.length; i++) 
-				{
+				for (var i:int = 0; i < actions.length; i++) {
+					
 					var element:MenuItem = new MenuItem();
 					var action:Action = actions[i] as Action;
-					var imageRadious:Number = 50 / 2;;
+					var imageRadious:Number = 50 / 2;
 					var move:Move = new Move(element);
 					
 					element.action = action;
@@ -57,7 +57,9 @@
 					elementAngle += angleAdd;
 					move.play();
 				}
+				
 				this.addEventListener(MouseEvent.MOUSE_OUT, mouseOut);
+				this.addEventListener(MouseEvent.CLICK, mouseClick);
 				area.addChild(this);
 				
 			}
@@ -66,12 +68,24 @@
 			
 				var menu:Canvas = event.target as Canvas;
 				
-				if ( menu != null && !menu.contains(event.relatedObject) ) {
+				if ( menu != null && !menu.contains(event.relatedObject) && 
+						this.parent != null ) {
 					
 					menu.parent.removeChild(menu);
 					
 				}
 
+			}
+			
+			private function mouseClick( event:MouseEvent ) : void {
+			
+				if (this.parent != null) {
+					
+					this.parent.removeChild(this);
+					
+				}
+				
+				
 			}
 			
 			private function clickAction( event:MouseEvent ) : void {

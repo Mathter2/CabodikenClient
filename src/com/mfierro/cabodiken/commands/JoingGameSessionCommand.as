@@ -3,13 +3,13 @@ package com.mfierro.cabodiken.commands {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.mfierro.cabodiken.business.LobbyDelegate;
 	import com.mfierro.cabodiken.events.JoinGameSessionEvent;
-	import com.mfierro.cabodiken.model.ModelLocator;
+	import com.mfierro.cabodiken.model.CabodikenModel;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.mfierro.cabodiken.responders.JoinGameSessionResponder;
 
 	public class JoingGameSessionCommand implements ICommand {
 		
-		private var model:ModelLocator = ModelLocator.getInstance();
+		private var model:CabodikenModel = CabodikenModel.getInstance();
 		
 		public function JoingGameSessionCommand() {
 

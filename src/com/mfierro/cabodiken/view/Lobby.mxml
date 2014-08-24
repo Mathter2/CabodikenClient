@@ -10,14 +10,14 @@
 			import com.mfierro.cabodiken.commands.GetInvitationsCommand;
 			import com.mfierro.cabodiken.events.GetFriendsEvent;
 			import com.mfierro.cabodiken.events.GetInvitationsEvent;
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.model.CabodikenModel;
 			import flash.events.TimerEvent;
 			import flash.utils.Timer;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			
-			private var timer:Timer = new Timer(5000);
+			private var timer:Timer = new Timer(1000);
 			
 			private function init() : void {
 				

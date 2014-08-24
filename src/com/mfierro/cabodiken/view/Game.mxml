@@ -9,28 +9,64 @@
 	<mx:Script>
 		<![CDATA[
 			import com.mfierro.cabodiken.events.GetActionsEvent;
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.events.LoadResourcesEvent;
+			import com.mfierro.cabodiken.model.Area;
+			import com.mfierro.cabodiken.model.CabodikenModel;
 			import flash.events.TimerEvent;
 			import flash.utils.Timer;
+			import mx.managers.PopUpManager;
+			import mx.binding.utils.BindingUtils;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			
 			private var timer:Timer = new Timer(200);
 			
 			private function init() : void {
 				
+				var hands:int = 0;
 				timer.addEventListener(TimerEvent.TIMER, tick);
 				timer.start();
+				
+				for each (var area:Area in model.hands) {
+					
+					var hand:com.mfierro.cabodiken.view.controls.HandArea = new com.mfierro.cabodiken.view.controls.HandArea();
+					hand.width = 700;
+					hand.height = 300;
+					hand.x = 600;
+					hand.y = 10 + (300 * hands)
+					hand.area = area;
+					
+					if ( area.owner.id == model.user.id ) {
+						
+						hand.isOwner = true;
+						
+					}
+					
+					BindingUtils.bindProperty( hand, "lastActionCounter", model, "lastActionId" );
+					PopUpManager.addPopUp(hand, this);
+					hands ++;
+					
+				}
+				
+				var loadResources:LoadResourcesEvent = new LoadResourcesEvent();
+				loadResources.dispatch();
 				
 			}
 			
 			private function tick(timer:TimerEvent) : void {
 				
-				var getActions:GetActionsEvent = new GetActionsEvent();
-				getActions.dispatch();
+				if (model.resources) {
+					
+					var getActions:GetActionsEvent = new GetActionsEvent();
+					getActions.dispatch();
+				
+				}
+				
 				
 			}
+			
+			
 			
 		]]>
 	</mx:Script>
@@ -45,6 +81,6 @@
 	
 	<mx:Text text="THIS IS THE GAME!" />
 	
-	<controls:PlayArea id="table" lastActionCounter="{model.lastActionId}" width="600" height="600" backgroundColor="green" />
+	<controls:PlayArea id="table" lastActionCounter="{model.lastActionId}" width="600" height="600" backgroundColor="green" area="{new Area(0, null)}" />
 
 </mx:VBox>

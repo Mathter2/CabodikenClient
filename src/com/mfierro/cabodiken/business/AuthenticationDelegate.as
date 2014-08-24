@@ -5,14 +5,14 @@ package com.mfierro.cabodiken.business {
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.IResponder;
-	import com.mfierro.cabodiken.model.ModelLocator;
+	import com.mfierro.cabodiken.model.CabodikenModel;
 	import com.adobe.cairngorm.business.ServiceLocator;
 	
 	public class AuthenticationDelegate {
 		
 		private var responder : IResponder;
 		private var service : Object;
-		private var model:ModelLocator = ModelLocator.getInstance();
+		private var model:CabodikenModel = CabodikenModel.getInstance();
 		
 		public function AuthenticationDelegate( responder:IResponder ) {
 			
@@ -42,7 +42,6 @@ package com.mfierro.cabodiken.business {
 		
 		protected function onResult( e:ResultEvent  ) : void {
 			
-			trace("RESULT");
 			responder.result( new ResultEvent (ResultEvent.RESULT, false, true, e.result ) );
 			
 		}

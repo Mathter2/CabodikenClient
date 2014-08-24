@@ -82,13 +82,16 @@ package com.mfierro.cabodiken.factories {
 			
 			var players:ArrayCollection = new ArrayCollection();
 			
-			if (gameSession.Players != null) 
-			{
-				for (var index:int = 0; index < gameSession.Players.length; index++) 
-				{
+			if (gameSession.Players != null) {
+				
+				for (var index:int = 0; index < gameSession.Players.length; index++) {
+					
 					players.addItem( buildPlayerData(gameSession.Players[index]) );
+					
 				}
+				
 			}
+			
 			return new GameSessionData( buildObjectData(gameSession.Game), gameSession.GameSessionId, gameSession.IsGameStarted, players );
 			
 		}

@@ -3,17 +3,22 @@ package com.mfierro.cabodiken.model
 	import com.mfierro.cabodiken.events.ExecuteActionEvent;
 	import com.mfierro.cabodiken.vo.CardData;
 	import com.mfierro.cabodiken.vo.DeckData;
+	import com.mfierro.cabodiken.vo.LocationData;
 	import com.mfierro.cabodiken.vo.ResourceLibrary;
 	import com.mfierro.cabodiken.factories.ActionFactory;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	import mx.collections.ArrayCollection;
 	import mx.containers.Canvas;
 	import mx.controls.Image;
 	import mx.controls.Text;
 	import mx.core.DragSource;
+	import mx.effects.Rotate;
 	import mx.managers.DragManager;
 	import mx.core.UIComponent;
+	import com.mfierro.cabodiken.view.controls.HandArea;
 	import com.mfierro.cabodiken.view.controls.PlayArea;
 	import com.mfierro.cabodiken.view.controls.RadialMenu;
 	import mx.events.DragEvent;
@@ -24,21 +29,20 @@ package com.mfierro.cabodiken.model
 		public var cards:ArrayCollection = new ArrayCollection();
 		public var isFaceDown:Boolean = true;
 		
-		public function Deck( id:int, resourceId:int, name:String ) {
+		public function Deck( id:int, resourceId:int, name:String, location:LocationData, 
+				rotation:int, isLocked:Boolean ) {
 			
-			super(id, resourceId, name);
+			super( id, resourceId, name, location, rotation,isLocked );
 			
 		}
 		
 		public override function draw() : UIComponent {
 			
-			var resources:ResourceLibrary = ModelLocator.getInstance().resources;
+			var resources:ResourceLibrary = CabodikenModel.getInstance().resources;
 			var deck:DeckData = resources.decks[resourceId];
 			var topCard:CardData;
 			var topCardImage:String;
 			var topCardControl:Image;
-			var topCardId:int;
-			var cardBellowImage:String;
 			var canvas:Canvas = new Canvas();
 			
 			if (isFaceDown) {
@@ -47,12 +51,6 @@ package com.mfierro.cabodiken.model
 					
 					topCard = deck.cards[Number(cards.getItemAt(cards.length - 1))];
 					topCardImage = topCard.backImage;
-					
-					if ( cards.length > 1 ) {
-						
-						cardBellowImage = deck.cards[ Number( cards.getItemAt( cards.length - 2 ) ) ].backImage;
-						
-					}
 					
 				}
 				
@@ -63,12 +61,6 @@ package com.mfierro.cabodiken.model
 					topCard = deck.cards[ Number( cards.getItemAt(0) ) ];
 					topCardImage = topCard.frontImage;
 					
-					if ( cards.length > 1 ) {
-						
-						cardBellowImage = deck.cards[ Number( cards.getItemAt(1) ) ].frontImage;
-						
-					}
-					
 				}
 				
 			}
@@ -76,18 +68,12 @@ package com.mfierro.cabodiken.model
 			for (var i:int = 0; i < cards.length; i++) {
 				
 				var card:Image = new Image();
-				if (i == cards.length - 1) {
-					
-					card.load(topCardImage);
-					topCardControl = card;
-					
-				} else {
-					
-					card.load(cardBellowImage);
-					
-				}
-				card.top = ( cards.length - i - 1 ) * 2;
-				card.left = i;
+
+				card.load(topCardImage);
+				topCardControl = card;
+
+				card.y = ( cards.length - i - 1 ) * 2;
+				card.x = i;
 				canvas.addChild(card);
 			
 			}
@@ -108,14 +94,31 @@ package com.mfierro.cabodiken.model
 				
 			}
 			
+			canvas.addEventListener( DragEvent.DRAG_ENTER, dragEnter );
+			canvas.addEventListener( DragEvent.DRAG_DROP, dragDrop );
+			
 			canvas.x = location.x;
 			canvas.y = location.y;
+			
+			canvas.clipContent = false;
 			
 			return canvas;
 
 		}
 		
 		public override function executeMove( type:String, source:UIComponent, target:UIComponent, x:int, y:int ) : void {
+			
+			var areaId:int;
+			
+			if (target is PlayArea) {
+				
+				areaId = (target as PlayArea).area.areaId;
+				
+			} else if (target is Canvas && target.parent && target.parent is HandArea) {
+				
+				areaId = (target.parent as HandArea).area.areaId;
+				
+			}
 			
 			if ( type == "DECK") {
 			
@@ -127,32 +130,18 @@ package com.mfierro.cabodiken.model
 					
 				} else if (target is PlayArea) {
 					
-					
+					//Placeholder for AREA_MOVE through player areas
 					
 				}
 
 			} else if ( type == "DECK_CARD" ) {
 				
 				var targetArea:PlayArea = (target as PlayArea);
-				var drawParameters:ArrayCollection = new ArrayCollection( [ x, y ] );
+				var drawParameters:ArrayCollection = new ArrayCollection( [ x, y, areaId ] );
 				var drawAction:ExecuteActionEvent = new ExecuteActionEvent("DRAW", id, drawParameters);
 				drawAction.dispatch();
 				
 			}
-			
-		}
-		
-		override public function clone():GameObject {
-			
-			var clone:Deck = new Deck(id, resourceId, name);
-			
-			clone.isFaceDown = isFaceDown;
-			clone.isLocked = isLocked;
-			clone.location = location;
-			clone.rotation = rotation;
-			clone.cards = cards;
-			
-			return clone;
 			
 		}
 		
@@ -165,6 +154,17 @@ package com.mfierro.cabodiken.model
 		public function flip( isFaceDown:Boolean ) : void {
 			
 			this.isFaceDown = isFaceDown;
+			
+		}
+		
+		override public function clone():GameObject {
+			
+			var clone:Deck = new Deck(id, resourceId, name, location, rotation, isLocked );
+			
+			clone.isFaceDown = isFaceDown;
+			clone.cards = cards;
+			
+			return clone;
 			
 		}
 		
@@ -214,12 +214,34 @@ package com.mfierro.cabodiken.model
 		private function cardClick( event:MouseEvent ) : void {
 			
 			var deck:Canvas = event.currentTarget.parent as Canvas;
-			var area:PlayArea = deck.parent as PlayArea;
+			var area:UIComponent = deck.parent as UIComponent;
 			showRadialMenu( area );
 			
 		}
 		
-		private function showRadialMenu( area:PlayArea ) : void {
+		private function dragEnter( event:DragEvent ) : void {
+			
+			var dragSource:DragSource = event.dragSource;
+			
+			if (dragSource.hasFormat("type") && dragSource.hasFormat("object") && dragSource.hasFormat("x") && 
+				dragSource.hasFormat("y") && dragSource.dataForFormat("type") == "CARD" ) {
+
+				var target:UIComponent = event.currentTarget as UIComponent;
+				
+				DragManager.acceptDragDrop(target);
+				DragManager.showFeedback(DragManager.COPY);
+			}
+			
+		}
+		
+		private function dragDrop( event:DragEvent ) : void {
+			
+			var containable:IContainable = event.dragSource.dataForFormat("object") as IContainable;
+			containable.aggregate( id );
+			
+		}
+		
+		private function showRadialMenu( area:UIComponent ) : void {
 			
 			var radialMenu:RadialMenu = new RadialMenu();
 			var actions:ArrayCollection = new ArrayCollection(); //ActionFactory.buildActions( id, "LOCK", "SHUFFLE");

@@ -3,12 +3,12 @@ package com.mfierro.cabodiken.responders
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.IResponder;
 	import mx.controls.Alert;
-	import com.mfierro.cabodiken.model.ModelLocator;
+	import com.mfierro.cabodiken.model.CabodikenModel;
 	
 	public class JoinGameSessionResponder implements IResponder
 	{
 		
-		private var model:ModelLocator = ModelLocator.getInstance();
+		private var model:CabodikenModel = CabodikenModel.getInstance();
 		
 		public function JoinGameSessionResponder() {
 			
@@ -20,7 +20,7 @@ package com.mfierro.cabodiken.responders
 			
 			if (event.result) {
 				
-				model.workflowState = ModelLocator.GAME_LOBBY;
+				model.workflowState = CabodikenModel.GAME_LOBBY;
 				
 			} else {
 				

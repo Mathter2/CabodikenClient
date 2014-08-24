@@ -2,8 +2,7 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
 		width="100%" 
-		height="100%"
-		creationComplete="init()">
+		height="100%">
 	
 	<mx:Script>
 		<![CDATA[
@@ -25,21 +24,9 @@
 			[Bindable]
 			private var deck:DeckData = new DeckData( 0, "", null );
 			
-			private function init() : void {
-				
-				
-				
-			}
-			
 			private function getFrontImage() : void {
 				
 				imgFront.load(txtFrontImage.text);
-				
-			}
-			
-			private function load() : void {
-				
-				
 				
 			}
 			
@@ -66,7 +53,7 @@
 	<mx:FormItem label="Front Image Preview: ">
 		<mx:Image id="imgFront" />
 		<mx:Image id="imgFrontString" />
-		<mx:Button id="btnConvert" label="Convert" click="load()" />
+		<mx:Button id="btnConvert" label="Convert" />
 	</mx:FormItem>
 	
 	<mx:FormItem label="Back Image Preview: ">

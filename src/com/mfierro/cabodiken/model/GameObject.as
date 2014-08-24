@@ -1,6 +1,10 @@
 package com.mfierro.cabodiken.model 
 {
 	import com.mfierro.cabodiken.vo.LocationData;
+	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
+	import mx.containers.Canvas;
+	import mx.controls.Image;
 	import mx.core.UIComponent;
 	/**
 	 * ...
@@ -16,14 +20,14 @@ package com.mfierro.cabodiken.model
 		public var location:LocationData;;
 		public var isLocked:Boolean;
 		
-		public function GameObject( id:int, resourceId:int, name:String, rotation:int = 0, 
-									x:int = 0, y:int = 0, z:int = 0, isLocked:Boolean = false ) {
+		public function GameObject( id:int, resourceId:int, name:String, location:LocationData, 
+				rotation:int , isLocked:Boolean ) {
 			
 			this.id = id;
 			this.resourceId = resourceId;
 			this.name = name;
 			this.rotation = rotation;
-			this.location = new LocationData(x, y, z);
+			this.location = location;
 			this.isLocked = isLocked;
 			
 		}

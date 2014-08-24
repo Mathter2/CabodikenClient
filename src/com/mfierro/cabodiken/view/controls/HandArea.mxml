@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
-		xmlns:controls="com.mfierro.cabodiken.view.controls.*"
-		styleName=".boxStyle"
-		verticalScrollPolicy="off" horizontalScrollPolicy="off"
-		dragEnter="dragEnter(event)" dragDrop="dragDrop(event)">
-	
+<mx:TitleWindow
+			xmlns:mx="http://www.adobe.com/2006/mxml"
+			xmlns:controls="com.mfierro.cabodiken.view.controls.*"
+			title="{area.owner.name}'s Hand"
+			showCloseButton="false"
+			width="300" 
+			height="500"
+			verticalAlign="bottom" >
+			
 	<mx:Script>
 		<![CDATA[
 			import com.mfierro.cabodiken.model.Area;
+			import com.mfierro.cabodiken.model.Card;
 			import com.mfierro.cabodiken.model.Deck;
 			import com.mfierro.cabodiken.model.GameObject;
 			import com.mfierro.cabodiken.model.CabodikenModel;
-			import com.mfierro.cabodiken.vo.LocationData;
-			import flash.events.Event;
 			import flash.utils.Dictionary;
 			import mx.collections.ArrayCollection;
 			import mx.containers.Canvas;
@@ -20,7 +22,6 @@
 			import mx.core.DragSource;
 			import mx.core.UIComponent;
 			import mx.events.DragEvent;
-			import mx.events.FlexEvent;
 			import mx.utils.ObjectUtil;
 			import mx.effects.Move;
 			import mx.managers.DragManager;
@@ -31,37 +32,42 @@
 			private var _lastActionCounter:int;
 			[Bindable]
 			public var area:Area;
+			public var isOwner:Boolean = false;
 			
 			private var placedObjects:Dictionary = new Dictionary();
 			private var placedControls:Dictionary = new Dictionary();
 			
-			public function set lastActionCounter( value: int ) : void {
+			public function set lastActionCounter( value:int ) : void {
 				
 				var placedControl:UIComponent;
-				
-				for each( var gameObject:GameObject in model.gameObjectCollection.getObjectsByArea( area.areaId ) ) {
+				var gameObjectCopy:Card;
 					
-					var relativeLocation:LocationData;
+				for each( var gameObject:Card in model.gameObjectCollection.getObjectsByArea( area.areaId ) ) {
+					
+					gameObjectCopy = gameObject.clone() as Card;
+					
+					if ( !isOwner ) {
+							
+							gameObjectCopy.isFaceDown = ! gameObject.isFaceDown;
+							
+						}
 					
 					if ( placedObjects[gameObject.id] == null ) {
 						
-						placedControl = gameObject.draw()
-						placedObjects[gameObject.id] = gameObject.clone();
+						placedObjects[gameObject.id] = gameObjectCopy;
+						placedControl = gameObjectCopy.draw();
 						placedControls[gameObject.id] = placedControl;
-						this.addChild(placedControl);
+						canvas.addChild(placedControl);
 						
 					} else {
 						
-						var placedObject:GameObject = placedObjects[gameObject.id];
+						var placedObject:Card = placedObjects[gameObject.id];
 						
 						if ( ObjectUtil.compare(placedObject.location, gameObject.location) != 0 ) {
 								
 							var moveEffect:Move = new Move();
-							
 							placedControl = placedControls[gameObject.id];
-							
-							relativeLocation = model.objectPositioner.getAreaLocation( gameObject.location, 
-									placedControl.width, placedControl.height, this.width, this.height );
+							//placedObject = gameObject.clone();
 							placedObjects[gameObject.id] = placedObject;
 							moveEffect.target = placedControl;
 							moveEffect.xTo = gameObject.location.x;
@@ -74,23 +80,23 @@
 							
 						}
 						
-						if (ObjectUtil.compare(placedObject, gameObject) != 0 ) {
-									
-							this.removeElement(placedControls[gameObject.id]);
-							placedControl = gameObject.draw();
+						if (ObjectUtil.compare(placedObject, gameObjectCopy) != 0 ) {
+					
+							canvas.removeElement(placedControls[gameObject.id]);
+							placedControl = gameObjectCopy.draw();
 							placedControls[gameObject.id] = placedControl;
-							this.addElement(placedControl);
-							placedObjects[gameObject.id] = gameObject.clone();
+							canvas.addElement(placedControl);
+							placedObjects[gameObject.id] = gameObjectCopy;
 							
 						}
-						
+
 					}
 					
 				}
 				
 				for each (var removedGameObject:GameObject in model.gameObjectCollection.getRemovedObjects( area.areaId ) ) {
 					
-					this.removeChild(placedControls[removedGameObject.id]);
+					canvas.removeChild(placedControls[removedGameObject.id]);
 					
 					delete placedObjects[removedGameObject.id];
 					delete placedControls[removedGameObject.id];
@@ -112,12 +118,15 @@
 			private function dragEnter( event:DragEvent ) : void {
 				
 				var dragSource:DragSource = event.dragSource;
-				
+				// Accept the drag only if the user is dragging data 
+				// identified by the 'color' format value.
 				if (dragSource.hasFormat("type") && dragSource.hasFormat("object") && 
-					dragSource.hasFormat("x") && dragSource.hasFormat("y") ) {
+					dragSource.hasFormat("x") && dragSource.hasFormat("y") && 
+					(dragSource.dataForFormat("type") == "CARD" || dragSource.dataForFormat("type") == "DECK_CARD") ) {
 
+					// Get the drop target component from the event object.
 					var target:UIComponent = event.currentTarget as UIComponent;
-					
+					// Accept the drop.
 					DragManager.acceptDragDrop(target);
 				}
 				
@@ -137,12 +146,12 @@
 			
 		]]>
 	</mx:Script>
-	
+
 	<mx:Style>
 		@namespace mx "http://www.adobe.com/2006/mxml";
 		.boxStyle {
 			border-style: outset;
-            background-color: gray;
+			background-color: gray;
 		}
 		.friendName {
 			font-size: 12;
@@ -150,5 +159,8 @@
 			text-align:center;
 		}
 	</mx:Style>
+			
+	<mx:Canvas id="canvas" styleName=".boxStyle" dragEnter="dragEnter(event)" dragDrop="dragDrop(event)" width="100%" height="100%"
+			verticalScrollPolicy="off" horizontalScrollPolicy="off" backgroundColor="red" />
 	
-</mx:Canvas>
+</mx:TitleWindow>

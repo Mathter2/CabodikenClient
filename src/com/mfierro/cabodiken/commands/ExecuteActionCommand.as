@@ -3,14 +3,12 @@ package com.mfierro.cabodiken.commands {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.mfierro.cabodiken.business.GameDelegate;
 	import com.mfierro.cabodiken.events.ExecuteActionEvent;
-	import com.mfierro.cabodiken.model.ModelLocator;
+	import com.mfierro.cabodiken.model.CabodikenModel;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.mfierro.cabodiken.responders.ExecuteActionResponder;
 	import mx.collections.ArrayCollection;
 
 	public class ExecuteActionCommand implements ICommand {
-		
-		private var model:ModelLocator = ModelLocator.getInstance();
 		
 		public function ExecuteActionCommand() {
 

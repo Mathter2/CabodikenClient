@@ -14,7 +14,6 @@ package com.mfierro.cabodiken.commands {
 		
 		public function execute( event:CairngormEvent ):void {
 			
-			var createGameEvent:BeginGameEvent = event as BeginGameEvent;
 			var delegate:LobbyDelegate = new LobbyDelegate( new BeginGameResponder() );
 			delegate.BeginGameV01();
 			

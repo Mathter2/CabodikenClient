@@ -6,7 +6,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.model.CabodikenModel;
 			import com.mfierro.cabodiken.vo.GameSessionData;
 			import com.mfierro.cabodiken.vo.PlayerData;
 			import com.mfierro.cabodiken.vo.UserData;
@@ -16,7 +16,7 @@
 			import com.mfierro.cabodiken.view.controls.PlayerLobbyControl;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			[Bindable]
 			private var _players:ArrayCollection = new ArrayCollection();
 			

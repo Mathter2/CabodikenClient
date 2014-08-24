@@ -7,11 +7,11 @@
 	<mx:Script>
 		<![CDATA[
 			import com.mfierro.cabodiken.events.JoinGameSessionEvent;
-			import com.mfierro.cabodiken.model.ModelLocator;
+			import com.mfierro.cabodiken.model.CabodikenModel;
 			import com.mfierro.cabodiken.vo.InvitationData;
 			
 			[Bindable]
-			private var model:ModelLocator = ModelLocator.getInstance();
+			private var model:CabodikenModel = CabodikenModel.getInstance();
 			[Bindable]
 			public var invitation:InvitationData;
 			
@@ -39,7 +39,7 @@
 	</mx:Style>
 	
 	<mx:TextArea id="friendMessage" text="{invitation.getText()}" height="100%" editable="false" 
-		backgroundAlpha="0" borderSkin="{null}" useHandCursor="false" buttonMode="true" mouseChildren="false"/>
+		borderSkin="{null}" useHandCursor="false" buttonMode="true" mouseChildren="false"/>
 	
 	<mx:HBox height="100%" width="100%">
 		<mx:Button id="btnReject" label="Reject" />

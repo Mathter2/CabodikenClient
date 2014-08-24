@@ -7,13 +7,12 @@ package com.mfierro.cabodiken.responders
 	
 	import mx.controls.Alert;
 	
-	import com.mfierro.cabodiken.model.ModelLocator;
+	import com.mfierro.cabodiken.model.CabodikenModel;
 	import com.mfierro.cabodiken.factories.ServerDataFactory;
 	
 	public class SendInvitationResponder implements IResponder
 	{
 		
-		private var model:ModelLocator = ModelLocator.getInstance();
 		private var friend:UserData;
 		private var game:ObjectData;
 		

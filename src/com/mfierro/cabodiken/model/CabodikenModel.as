@@ -12,12 +12,11 @@ package com.mfierro.cabodiken.model {
 	
 	import mx.collections.ArrayCollection;
     
-    [Bindable]
-	public final class ModelLocator implements IModelLocator {
+	public final class CabodikenModel implements IModelLocator {
 
-		private static var instance:ModelLocator;
+		private static var instance:CabodikenModel;
 
-		public function ModelLocator(access:SingletonEnforcer) {
+		public function CabodikenModel(access:SingletonEnforcer) {
 			
 			if (access == null) {
 			    throw new CairngormError( CairngormMessageCodes.SINGLETON_EXCEPTION, "ModelLocator" );
@@ -29,10 +28,10 @@ package com.mfierro.cabodiken.model {
 			
 		}
 		 
-		public static function getInstance() : ModelLocator {
+		public static function getInstance() : CabodikenModel {
 			
 			if (instance == null) {
-				instance = new ModelLocator( new SingletonEnforcer() );
+				instance = new CabodikenModel( new SingletonEnforcer() );
 			}
 			return instance;
 			
@@ -42,23 +41,34 @@ package com.mfierro.cabodiken.model {
 		*	Variables
 		*/
 		
-		public var workflowState:uint = ModelLocator.LOGIN_FORM; //CHANGE!!!
-				
-		//public var sessionTokenId:String = "gxb1O3aMChiU77WXnnheF635IKwJltJd51w3IXfMLBo7pxFpNtT5F6TtVtJaZi56"; //CHAGE!!!
-		public var sessionTokenId:String = ""; //CHAGE!!!
+		[Bindable]
+		public var workflowState:uint = CabodikenModel.LOGIN_FORM;
+		[Bindable]
+		public var sessionTokenId:String = "";
+		[Bindable]
 		public var user:UserData;
+		[Bindable]
 		public var friends:ArrayCollection = new ArrayCollection();
+		[Bindable]
 		public var invitations:ArrayCollection = new ArrayCollection();
+		[Bindable]
 		public var games:ArrayCollection = new ArrayCollection();
-		//public var gameSessionId:String = "Lt21N88FxgZ6v4vwVcM!Xby8OOIfMaIYj5dwPSnCcIO6wamOwnKTH15TaXsooSb2";
+		[Bindable]
 		public var gameSessionId:String = "";
+		[Bindable]
 		public var gameSession:GameSessionData;
+		[Bindable]
 		public var objectPositioner:ObjectPositionerFactory;
+		[Bindable]
 		public var resources:ResourceLibrary;
+		[Bindable]
 		public var lastActionId:int = 0;
-		public var table:Area = new Area(0);
-		//public var decks:ArrayCollection = new ArrayCollection();
-		public var gameObjects:Dictionary = new Dictionary();
+		[Bindable]
+		public var gameObjectCollection:GameObjectCollection = new GameObjectCollection();
+		[Bindable]
+		public var hands:Dictionary = new Dictionary();
+		//[Bindable]
+		//public var gameObjects:Dictionary = new Dictionary();
 		
 		public static const LOGIN_FORM:uint = 0;
 		public static const LOBBY:uint = 1;
