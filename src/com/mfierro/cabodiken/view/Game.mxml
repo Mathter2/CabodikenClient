@@ -79,8 +79,6 @@
 		}
 	</mx:Style>
 	
-	<mx:Text text="THIS IS THE GAME!" />
-	
 	<controls:PlayArea id="table" lastActionCounter="{model.lastActionId}" width="600" height="600" backgroundColor="green" area="{new Area(0, null)}" />
 
 </mx:VBox>
