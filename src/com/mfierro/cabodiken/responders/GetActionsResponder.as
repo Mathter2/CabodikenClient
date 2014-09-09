@@ -19,42 +19,7 @@ package com.mfierro.cabodiken.responders
 		
 		public function result( e:Object ):void {
 			
-			var event:ResultEvent = e as ResultEvent;
-			if ( event.result.length > 0 ) 
-			{
-				if (!model.isExecutingAction) {
-					
-					model.isExecutingAction = true;
-					for each (var action:Object in event.result) 
-					{
-						if(action.Index >= model.lastActionId) {
-							
-							switch (action.Name) 
-							{
-								case "CREATE_DECK":
-									createDeck(action.Parameters);
-									break;
-								case "CREATE_CARD":
-									createCard(action.Parameters);
-									break;
-								case "MOVE":
-									move(action.Parameters);
-									break;
-								case "REORDER":
-									reorder(action.Parameters);
-									break;
-								case "LOCK":
-									lock(action.Parameters);
-									break;
-								case "FLIP":
-									flip(action.Parameters);
-									break;
-								case "REMOVE":
-									remove(action.Parameters);
-									break;
-								default:
-								Alert.show("Cannot find action: " + action.Name, "Internal Error");
-							}
+
 							
 							model.lastActionId = action.Index + 1;
 							
