@@ -41,6 +41,7 @@ package com.mfierro.cabodiken.model {
 		*	Variables
 		*/
 		
+		public var isExecutingAction:Boolean = false;
 		[Bindable]
 		public var workflowState:uint = CabodikenModel.LOGIN_FORM;
 		[Bindable]
@@ -76,7 +77,6 @@ package com.mfierro.cabodiken.model {
 		public static const GAME:uint = 3;
 		public static const EDITOR:uint = 4;
 		
-		public var image:String = "";
 	}
 }
 
