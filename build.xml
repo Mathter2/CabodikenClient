@@ -1,0 +1,27 @@
+﻿<project name="CabodikenClient" default="dist" basedir=".">
+  <description>
+    Cabodiken Client Build File
+  </description>
+  <!-- set global properties for this build -->
+  <property name="fdbuild" location="./compiler/fdbuild.exe" />
+  <property name="local"  location="C:/inetpub/cabodiken_client" />
+  <property name="swf" location="bin/CabodikenClient.swf" />
+
+  <target name="compile" description="Compiles the swf" >
+    <exec executable="${fdbuild}" failonerror="true">
+      <arg value=".\Cabodiken Client.as3proj" />
+      <arg value="-version" />
+      <arg value="4.6.0; 3.1" />
+      <arg value="-compiler" />
+      <arg value="C:\Users\Mathter\Desktop\flex_sdk_4.6" />
+      <arg value="-library" />
+      <arg value="C:\Program Files (x86)\FlashDevelop\Library" />
+    </exec>
+  </target>
+
+  <target name="dist" depends="compile" description="copy the files" >
+    <!-- Copy SWF -->
+    <copy file="${swf}" todir="${local}" />
+  </target>
+
+</project>
