@@ -17,26 +17,26 @@
 	
 	<!-- BETA 
 	<mx:WebService id="WebServiceAuthentication"
-		wsdl="http://localhost:4391/WebServices/WebServiceAuthentication.svc?wsdl" />
+		wsdl="http://localhost:4395/WebServices/WebServiceAuthentication.svc?wsdl" />
 		
 	<mx:WebService id="WebServiceLobby"
-		wsdl="http://localhost:4391/WebServices/WebServiceLobby.svc?wsdl" />
+		wsdl="http://localhost:4395/WebServices/WebServiceLobby.svc?wsdl" />
 		
 	<mx:WebService id="WebServiceGame"
-		wsdl="http://localhost:4391/WebServices/WebServiceGame.svc?wsdl" />
+		wsdl="http://localhost:4395/WebServices/WebServiceGame.svc?wsdl" />
 	-->
 	
 	<!-- PROD
 	<mx:WebService id="WebServiceAuthentication"
-		wsdl="http://cabodiken.servegame.com/WebServices/WebServiceAuthentication.svc?wsdl" />
+		wsdl="http://186.52.206.55:4395/WebServices/WebServiceAuthentication.svc?wsdl" />
 		
 	<mx:WebService id="WebServiceLobby"
-		wsdl="http://cabodiken.servegame.com/WebServices/WebServiceLobby.svc?wsdl" />
+		wsdl="http://186.52.206.55:4395/WebServices/WebServiceLobby.svc?wsdl" />
 		
 	<mx:WebService id="WebServiceGame"
-		wsdl="http://cabodiken.servegame.com/WebServices/WebServiceGame.svc?wsdl" />
+		wsdl="http://186.52.206.55:4395/WebServices/WebServiceGame.svc?wsdl" />
 	-->
-	
+
 	<mx:WebService id="WebServiceAuthentication"
 		wsdl="http://localhost:11604/WebServices/WebServiceAuthentication.svc?wsdl" />
 		
